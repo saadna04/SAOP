@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+
+	<script type="text/javascript">
+		function soapRequest(){
+  var str = '<Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/"><Body>'+ 
+           ' <Execute xmlns="urn:schemas-microsoft-com:xml-analysis"><Command>'+ 
+          '  <Batch xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">'+ 
+	'<Parallel>'+ 
+		'<Process xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '+ 
+		'xmlns:ddl2= "http://schemas.microsoft.com/analysisservices/2003/engine/2" '+ 
+		'xmlns:ddl2_2="http://schemas.microsoft.com/analysisservices/2003/engine/2/2" '+ 
+		'xmlns:ddl100_100="http://schemas.microsoft.com/analysisservices/2008/engine/100/100" '+ 
+		'xmlns:ddl200="http://schemas.microsoft.com/analysisservices/2010/engine/200" '+ 
+		'xmlns:ddl200_200="http://schemas.microsoft.com/analysisservices/2010/engine/200/200" '+ 
+		'xmlns:ddl300="http://schemas.microsoft.com/analysisservices/2011/engine/300" '+ 
+		'xmlns:ddl300_300="http://schemas.microsoft.com/analysisservices/2011/engine/300/300" '+ 
+		'xmlns:ddl400="http://schemas.microsoft.com/analysisservices/2012/engine/400" '+ 
+		'xmlns:ddl400_400="http://schemas.microsoft.com/analysisservices/2012/engine/400/400">'+ 
+			'<Object>'+ 
+		'		<DatabaseID>testCube</DatabaseID>'+ 
+		'		<CubeID>Adventure Works DW2012</CubeID>'+ 
+		'	</Object>'+ 
+		'	<Type>ProcessFull</Type>'+ 
+		'	<WriteBackTableCreation>UseExisting</WriteBackTableCreation>'+ 
+	'	</Process>'+ 
+	'</Parallel>'+ 
+'</Batch>'+ 
+            '</Command><Properties><PropertyList></PropertyList>'+ 
+           ' </Properties></Execute></Body></Envelope>';
+
+        function createCORSRequest(method, url) {
+                    var xhr = new XMLHttpRequest();
+                    if ("withCredentials" in xhr) {
+                        xhr.open(method, url, false);
+                    } else if (typeof XDomainRequest != "undefined") {
+                        alert
+                        xhr = new XDomainRequest();
+                        xhr.open(method, url);
+                    } else {
+                        console.log("CORS not supported");
+                        alert("CORS not supported");
+                        xhr = null;
+                    }
+                    return xhr;
+                }
+        var xhr = createCORSRequest("POST", "http://localhost/olap/msmdpump.dll");
+        if(!xhr){
+         console.log("XHR issue");
+         return;
+        }
+
+        xhr.onload = function (){
+         var results = xhr.responseText;
+         console.log(results);
+        }
+
+        xhr.setRequestHeader('Content-Type', 'text/xml');
+        xhr.send(str);
+ }
+	</script>
+<body>
+	<input type="button" value ="SOAP Request" onclick="soapRequest();"/>
+</body>
+</html>
+
